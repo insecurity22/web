@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <pre style="font-size: 18px">
+
+        <B>1. SVG</B>
+
+        1) 
+            M : MoveTo
+
+            L : lineTo
+            H : Horizontal(수평) lineTo
+            V : Vertical(수직) lineTo
+
+            C : curveTo
+            S : smooth curveTo(매끄러운 곡선)
+            Q : quadratic Bézier curve(베지어 곡선)
+            T : smooth quadratic Bézier curveTo(부드러운 정방형 3차원 곡선)
+            A : elliptical Arc(타원형 호)
+            
+            Z : close path
+
+        2)
+            대문자는 절대 위치
+            소문자는 상대 위치
+
+        https://velog.io/@sbyeol3/SVG%EB%A5%BC-%EA%B3%B5%EB%B6%80%ED%95%B4%EB%B3%B4%EC%9E%90-2-SVG-Path
+        http://blog.naver.com/PostView.nhn?blogId=pjh445&logNo=220045621716
+
+
+        3) Tip
+            1. M, 처음 기준점 좌표
+
+        -----------------------------------------------------------------------------------------------
+    </pre>
+
+    <pre style="font-size: 18px">
+        <B>2. SVG Path</B>
+
+        1. Line : 선 그리기
+        - M 기준점 0, 0 / 150, 0
+        - L 직선 75, 200 / 200, 225
+        - L 직선 225, 200 / 225 200
+        - Z 패스 시작 위치까지 연결해서 패스 닫기
+        <svg width="400" height="200" style="border: 1px solid red">
+            <path d="M0 0 L75 200 L225 200 Z" fill="green" />
+            <path d="M150 0 L75 200 L225 200 Z" fill="skyblue" />
+        </svg>
+
+        2. H(가로 선), V(세로 선)
+        - M 기준점, M50, 100 / M250, 0
+        - H200
+        - V200
+        <svg width="400" height="200" style="border: 1px solid red">
+            <path d="M50,100 H200" stroke="red" stroke-width="5" />
+            <path d="M250,0 V200" stroke="blue" stroke-width="5" />
+        </svg>
+
+        3. C : 곡선 그리기
+        https://codepen.io/thebabydino/full/EKLNvZ
+        - M 100, 150
+        - C ┌ 90, 70 / ┐ 300, 70 / 끝점 300, 150
+        <svg width="400" height="200" style="border: 1px solid red">
+            <path d="M100,150 C90,70 300,70 300,150" fill="none" stroke="black" stroke-width="5" />
+        </svg>
+
+        4. S : 매끄러운 곡선 그리기
+        - M 시작점 100, 150
+        - S 곡선 ┌ 180, 0 / ┐ 300, 150 
+        <svg width="400" height="200" style="border: 1px solid red">
+            <path d="M100,150 S180,0 300,150" fill="none" stroke="black" stroke-width="5" />
+        </svg> 
+        
+        5. Q : 베지어 곡선
+        https://ko.javascript.info/bezier-curve
+        - M 시작점 100, 150
+        - Q 곡선 ┌ 140 / ─ 50(높이) / ┐ 200(가로) 150(세로)
+        <svg width="400" height="200" style="border: 1px solid blue">
+            <path d="M100,150 Q140 20 200 150" fill="none" stroke="black" stroke-width="5" />
+        </svg>
+        
+        6. T : 부드러운 3차원 곡선
+        http://mm.sookmyung.ac.kr/~sblim/lec/svg-smil02/svg02-05.htm
+        - M 시작점 50, 200
+        - T 곡선 ┌┐ 200, -20 / └┘ 250, 150 / T 끝점 400(가로), 100(높이)
+        <svg width="450" height="300" style="border: 1px solid blue">
+            <path d="M50,200 Q200,-20 250,150 T400,100" fill="none" stroke="black" stroke-width="5" />
+        </svg>
+       
+        
+        5. A : 타원형 호
+        http://mm.sookmyung.ac.kr/~sblim/lec/svg-smil02/svg02-05.htm
+        <img src="https://developer.mozilla.org/@api/deki/files/345/=SVGArcs_Flags.png" style="width:250px" />
+        - 매개변수
+            - rx ry : Arc에 해당하는 타원의 반지름(타원의 중심은 자동으로 계산)
+            - x-axis-rotation : x축 회전 각도
+            - large-arc-flag : 호의 각도가 180도 이상이면 1, 아니면 0
+            - sweep-flag : 호의 진행방향이 양의 각도이면 1(시계방향), 음의 각도 방향이면 0
+            - x y : Arc의 끝점(Arc의 시작점은 현재 위치)
+        : 내 방식대로 요약: 0 0 0(1/4), 0 1 0(원+1/4), 0 0 1(1/4-교집합), 0 1 1(원-1/4)
+        
+            1. M 시작점 200, 175 / v 수직 -150
+               a(타원형 호) 150,150 0,0,0 -150,150
+
+            2. M 시작점 225, 198 / h 수평 -150
+               a(타원형 호) 150,150 0,1,0 150,-150 
+
+               1) 숫자가 커지면 가로가 넓어지고, 숫자가 작아지면 세로로 넓어짐,
+               2) 가로 크기(숫자가 적으면 원이 넓어지고), 세로 크기(반 쪼개짐)
+               3) 전체(크기)
+        <svg width="410" height="400" style="border: 1px solid blue">
+            <!-- <path d="M100,200 a150,150 0 1,0 150,-150 z" fill="red"/> -->
+            <path d="M200,175 v-150 a150,150 0, 0, 0 -150,150 z" fill="yellow" stroke="blue" stroke-width="5" />
+            <path d="M225,198 h-150 a150,150 0, 1, 0 150,-150 z" fill="red" stroke="blue" stroke-width="5" />
+        </svg>
+        
+
+        6. 기타
+        https://ghj1001020.tistory.com/738
+        <svg width="400" height="200" style="border: 1px solid red">
+            <path d="M50,100 C100,150 150,50 200,100 S250,50 300,100" stroke="green" stroke-width="5" fill="none" />
+        </svg>
+
+    </pre>
+
+    https://a11y.gitbook.io/graphics-aria/svg-graphics/svg-paths-shape
+
+
+</body>
+</html>
