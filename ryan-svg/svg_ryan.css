@@ -17,8 +17,8 @@ form {
 }
 
 .eyes {
-    transform-origin: 50% 50%; /* 눈의 중심 */
-    transform: rotate3d(0, 0, 0, 0deg);
+    transform-origin: 50% 50% -40px; /* 눈의 중심 */
+    transform: rotate3d(0.5, 0, 0, 0deg);
 }
 
 input {
